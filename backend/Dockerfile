@@ -1,4 +1,4 @@
-FROM python:3.9.19-bookworm
+FROM python:3.12.4-bookworm
 
 
 WORKDIR /app
@@ -15,15 +15,8 @@ RUN pip install poetry
 
 RUN poetry install
 
-ENV POSTGRES_USER="{user}"
-ENV POSTGRES_PASSWORD="{password}"
-ENV POSTGRES_SERVER="{server}"
-ENV POSTGRES_PORT="{port}"
-ENV POSTGRES_DB="{db}"
-
-# Construct the final connection string using these variables
-ENV DATABASE_URL="postgresql+psycopg://${PG_USER}:${PG_PASSWORD}@${PG_SERVER}:${PG_PORT}/${PG_DB}"
-
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5170"]
+EXPOSE 8000
+
+CMD ["sh", "-c", "poetry run bash ./prestart.sh && poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
