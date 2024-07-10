@@ -15,8 +15,10 @@ RUN pip install poetry
 
 RUN poetry install
 
+ENV PYTHONPATH=/app
+
 COPY . .
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "poetry run bash ./prestart.sh && poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["sh", "-c", "poetry run bash ./prestart.sh && poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
